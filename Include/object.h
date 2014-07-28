@@ -157,8 +157,17 @@ typedef struct _Py_Identifier {
     PyObject *object;
 } _Py_Identifier;
 
+//: 初始化一个静态字符串常量
 #define _Py_static_string_init(value) { 0, value, 0 }
 #define _Py_static_string(varname, value)  static _Py_Identifier varname = _Py_static_string_init(value)
+/* 预处理器中的`#`符号(stringize)将Macro中指定argument转换为一个字符串常量
+ * 所以下面的macro里的varname会被转化为字符串常量而被`_Py_static_string`宏作为第二个参数
+ * 传给`_Py_static_string_init`作为第二个参数进行初始化.
+ *
+ * 预处理中得`##`符号(token parsing)将两个参数连接在一起成为一个字符串常量，
+ * 因此下面macro中的`PyId_##varname`会被合成一个字串并传给`_Py_static_string`，
+ * 作为变量名
+ */
 #define _Py_IDENTIFIER(varname) _Py_static_string(PyId_##varname, #varname)
 
 /*
