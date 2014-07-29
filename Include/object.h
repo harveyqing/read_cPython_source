@@ -164,7 +164,7 @@ typedef struct _Py_Identifier {
  * 所以下面的macro里的varname会被转化为字符串常量而被`_Py_static_string`宏作为第二个参数
  * 传给`_Py_static_string_init`作为第二个参数进行初始化.
  *
- * 预处理中得`##`符号(token parsing)将两个参数连接在一起成为一个字符串常量，
+ * 预处理中的`##`符号(token parsing)将两个参数连接在一起成为一个字符串常量，
  * 因此下面macro中的`PyId_##varname`会被合成一个字串并传给`_Py_static_string`，
  * 作为变量名
  */
@@ -181,12 +181,18 @@ checking for a nil pointer; it should always be implemented except if
 the implementation can guarantee that the reference count will never
 reach zero (e.g., for statically allocated type objects).
 
+类型对象包含了一个字符串，该字符串包含了类型名（有助于调试）；还有内存分配参数（见
+`PyObject_New()`和`PyObject_NewVar()`）；以及访问该类型对象的方法。 
+这些方法是可选的，一个`nil`指针意味着某种访问在此类型上不存在。
+`Ty_DECREF()`宏用于tp_dealloc（不检查空指针）；它应该总是被实现的，除非某种实现能保证引用计数
+永远不会到0.
+
 NB: the methods for certain type groups are now contained in separate
 method blocks.
 */
 
-typedef PyObject * (*unaryfunc)(PyObject *);
-typedef PyObject * (*binaryfunc)(PyObject *, PyObject *);
+typedef PyObject * (*unaryfunc)(PyObject *);                                        //: 一元函数
+typedef PyObject * (*binaryfunc)(PyObject *, PyObject *);                           //: 二元函数
 typedef PyObject * (*ternaryfunc)(PyObject *, PyObject *, PyObject *);
 typedef int (*inquiry)(PyObject *);
 typedef Py_ssize_t (*lenfunc)(PyObject *);

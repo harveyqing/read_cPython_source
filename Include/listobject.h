@@ -5,12 +5,17 @@
 Another generally useful object type is an list of object pointers.
 This is a mutable type: the list items can be changed, and items can be
 added or removed.  Out-of-range indices or non-list objects are ignored.
+另一个有用的对象类型是一个对象指针的列表。
+它是一个可变类型：列表条目是可变的，可以添加或者删除条目。超出范围的索引或者非列表对象
+将被忽略。
 
 *** WARNING *** PyList_SetItem does not increment the new item's reference
 count, but does decrement the reference count of the item it replaces,
 if not nil.  It does *decrement* the reference count if it is *not*
 inserted in the list.  Similarly, PyList_GetItem does not increment the
 returned item's reference count.
+*** WARNING *** PyList_SetItem 不会增加新条目的引用计数，但是会减少被替换条目的引用
+计数（被替换的条目非空）。
 */
 
 #ifndef Py_LISTOBJECT_H
